@@ -54,12 +54,12 @@
             item.altitude = @(location.altitude);
             item.time = @([[NSDate date] timeIntervalSince1970] * 1000);
             item.speed = @(location.speed);
-//            location.course //north is 0 degrees, east is 90 degrees, south is 180 degrees, and so on
-            item.direction = @(location.course);
-//           
+            item.horizontalAccuracy = @(location.horizontalAccuracy);
+            item.verticalAccuracy = @(location.verticalAccuracy);
+            item.direction = @(location.course);//location.course //north is 0 degrees, east is 90 degrees, south is 180 degrees, and so on
             item.track = track;
             
-             [track addWaypointsObject:item];
+            [track addWaypointsObject:item];
             
             [ApplicationDelegate saveChangesInContext:moc];
         }

@@ -46,8 +46,8 @@
 		4AB4899B1B625F2C0047E195 /* TrackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB4899A1B625F2C0047E195 /* TrackViewController.m */; };
 		4AB4899E1B626D590047E195 /* SharedRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB4899D1B626D590047E195 /* SharedRecorder.m */; };
 		4AB489A11B627B140047E195 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB489A01B627B140047E195 /* Track.m */; };
-		4AB489A71B6294310047E195 /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB489A61B6294310047E195 /* Location.m */; };
 		4AB489AA1B62A8590047E195 /* MulticolorPolylineSegment.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB489A91B62A8590047E195 /* MulticolorPolylineSegment.m */; };
+		4AFDC2241B66971D0090E602 /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AFDC2231B66971D0090E602 /* Location.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -143,10 +143,10 @@
 		4AB4899D1B626D590047E195 /* SharedRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedRecorder.m; sourceTree = "<group>"; };
 		4AB4899F1B627B140047E195 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
 		4AB489A01B627B140047E195 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
-		4AB489A51B6294310047E195 /* Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Location.h; sourceTree = "<group>"; };
-		4AB489A61B6294310047E195 /* Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Location.m; sourceTree = "<group>"; };
 		4AB489A81B62A8590047E195 /* MulticolorPolylineSegment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MulticolorPolylineSegment.h; sourceTree = "<group>"; };
 		4AB489A91B62A8590047E195 /* MulticolorPolylineSegment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MulticolorPolylineSegment.m; sourceTree = "<group>"; };
+		4AFDC2221B66971D0090E602 /* Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Location.h; sourceTree = "<group>"; };
+		4AFDC2231B66971D0090E602 /* Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Location.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,9 +223,9 @@
 				4A1D9C431B6122A700AA9F21 /* Images.xcassets */,
 				4A1D9C451B6122A700AA9F21 /* LaunchScreen.xib */,
 				4AB4899F1B627B140047E195 /* Track.h */,
+				4AFDC2221B66971D0090E602 /* Location.h */,
+				4AFDC2231B66971D0090E602 /* Location.m */,
 				4AB489A01B627B140047E195 /* Track.m */,
-				4AB489A51B6294310047E195 /* Location.h */,
-				4AB489A61B6294310047E195 /* Location.m */,
 				4A1D9C3A1B6122A700AA9F21 /* watchtest.xcdatamodeld */,
 				4A1D9C331B6122A700AA9F21 /* Supporting Files */,
 			);
@@ -523,8 +523,8 @@
 				4A1D9C361B6122A700AA9F21 /* main.m in Sources */,
 				4AB489AA1B62A8590047E195 /* MulticolorPolylineSegment.m in Sources */,
 				4AB4899B1B625F2C0047E195 /* TrackViewController.m in Sources */,
-				4AB489A71B6294310047E195 /* Location.m in Sources */,
 				4A1D9C3F1B6122A700AA9F21 /* LocationViewController.m in Sources */,
+				4AFDC2241B66971D0090E602 /* Location.m in Sources */,
 				4AB4899E1B626D590047E195 /* SharedRecorder.m in Sources */,
 				4A1D9C3C1B6122A700AA9F21 /* watchtest.xcdatamodeld in Sources */,
 				4AB489A11B627B140047E195 /* Track.m in Sources */,

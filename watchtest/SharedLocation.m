@@ -67,7 +67,7 @@ typedef NS_ENUM(NSUInteger, GeolocationCgenType) {
     self = [super init];
     
     if (self) {
-        
+        self.status = NO;
         self.sharedManager = [CLLocationManager new];
         self.sharedManager.delegate = self;
         self.sharedManager.distanceFilter = 10;
@@ -137,7 +137,7 @@ typedef NS_ENUM(NSUInteger, GeolocationCgenType) {
 //            break;
 //    }
 
-    [self startLocator];
+//    [self startLocator];
 }
 
 -(void)startLocator
@@ -147,13 +147,14 @@ typedef NS_ENUM(NSUInteger, GeolocationCgenType) {
     if ([SharedLocation isServiceEnabled]==YES) {
         [self.sharedManager startUpdatingLocation];
         [self.sharedManager startUpdatingHeading];
-        
+        self.status = YES;
 //        [self.sharedManager startMonitoringSignificantLocationChanges];
     }
 }
 
 -(void)resetLocator
 {
+    self.status = NO;
     if(self.sharedManager)
     {
         [self.sharedManager stopUpdatingHeading];

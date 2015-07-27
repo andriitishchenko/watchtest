@@ -23,6 +23,8 @@
     @property (strong,nonatomic) CLHeading *lastHeading;
     @property (strong,nonatomic) NSError* error;
     @property (nonatomic) CLLocationDirection direction;
+    @property(nonatomic) BOOL status;
+
 +(SharedLocation *)sharedInstance ;
 +(BOOL)isServiceEnabled;
 +(NSString*)getHeaderLocation;

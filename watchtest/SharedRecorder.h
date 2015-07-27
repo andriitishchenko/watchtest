@@ -11,6 +11,7 @@
 @interface SharedRecorder : NSObject
     @property(strong,nonatomic) NSManagedObjectID*trackID;
 
+
 +(SharedRecorder *)sharedInstance ;
 -(void)startRecording;
 -(void)stopRecording;

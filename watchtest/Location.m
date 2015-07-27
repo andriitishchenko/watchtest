@@ -2,7 +2,7 @@
 //  Location.m
 //  watchtest
 //
-//  Created by Andrii Tishchenko on 24.07.15.
+//  Created by Andrii Tishchenko on 27.07.15.
 //  Copyright (c) 2015 Andrii Tishchenko. All rights reserved.
 //
 
@@ -13,11 +13,13 @@
 @implementation Location
 
 @dynamic altitude;
+@dynamic direction;
 @dynamic latitude;
 @dynamic longitude;
-@dynamic time;
-@dynamic direction;
 @dynamic speed;
+@dynamic time;
+@dynamic horizontalAccuracy;
+@dynamic verticalAccuracy;
 @dynamic track;
 
 @end

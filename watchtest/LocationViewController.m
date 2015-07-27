@@ -89,31 +89,66 @@
     [[SharedRecorder sharedInstance] startRecording];
 }
 
+//-(void)zoomToFitMapAnnotations:(MKMapView*)mapView
+//{
+//    if([mapView.annotations count] == 0)
+//        return;
+
+//    CLLocationCoordinate2D topLeftCoord;
+//    topLeftCoord.latitude = -90;
+//    topLeftCoord.longitude = 180;
+//    
+//    CLLocationCoordinate2D bottomRightCoord;
+//    bottomRightCoord.latitude = 90;
+//    bottomRightCoord.longitude = -180;
+//    
+//    for(MapAnnotation* annotation in mapView.annotations)
+//    {
+//        topLeftCoord.longitude = fmin(topLeftCoord.longitude, annotation.coordinate.longitude);
+//        topLeftCoord.latitude = fmax(topLeftCoord.latitude, annotation.coordinate.latitude);
+//        
+//        bottomRightCoord.longitude = fmax(bottomRightCoord.longitude, annotation.coordinate.longitude);
+//        bottomRightCoord.latitude = fmin(bottomRightCoord.latitude, annotation.coordinate.latitude);
+//    }
+//    
+//    MKCoordinateRegion region;
+//    region.center.latitude = topLeftCoord.latitude - (topLeftCoord.latitude - bottomRightCoord.latitude) * 0.5;
+//    region.center.longitude = topLeftCoord.longitude + (bottomRightCoord.longitude - topLeftCoord.longitude) * 0.5;
+//    region.span.latitudeDelta = fabs(topLeftCoord.latitude - bottomRightCoord.latitude) * 1.1; // Add a little extra space on the sides
+//    region.span.longitudeDelta = fabs(bottomRightCoord.longitude - topLeftCoord.longitude) * 1.1; // Add a little extra space on the sides
+//    
+//    region = [mapView regionThatFits:region];
+//    [mapView setRegion:region animated:YES];
+//}
+
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    float spanX = 0.00725;
-    float spanY = 0.00725;
-    MKCoordinateRegion region =  MKCoordinateRegionMakeWithDistance (
-                                        userLocation.location.coordinate, 20000, 20000);
-    region.span.latitudeDelta = spanX;
-    region.span.longitudeDelta = spanY;
-    [self.map setRegion:region animated:NO];
-    [self.map setCenterCoordinate:userLocation.coordinate animated:YES];
-}
-
-- (void)locationUpdated:(NSNotification*)notification {
-    [self locationDidUpdated];
-}
-
--(void)locationDidUpdated
-{
-    CLLocation *location = [SharedLocation sharedInstance].currentLocation;
     
-    NSLog(@"%@", [NSString stringWithFormat:@" %f, %f", location.coordinate.latitude, location.coordinate.longitude]);
-//    self.userPositionMarker.position = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
-//    self.userPositionMarker.map = self.mapView;
+    if ([SharedLocation sharedInstance].status) {
+        float spanX = 0.00725;
+        float spanY = 0.00725;
+        MKCoordinateRegion region =  MKCoordinateRegionMakeWithDistance (
+                                                                         userLocation.location.coordinate, 20000, 20000);
+        region.span.latitudeDelta = spanX;
+        region.span.longitudeDelta = spanY;
+        [self.map setRegion:region animated:NO];
+        [self.map setCenterCoordinate:userLocation.coordinate animated:YES];
+    }
 }
 
+//- (void)locationUpdated:(NSNotification*)notification {
+//    [self locationDidUpdated];
+//}
+//
+//-(void)locationDidUpdated
+//{
+//    CLLocation *location = [SharedLocation sharedInstance].currentLocation;
+//    
+//    NSLog(@"%@", [NSString stringWithFormat:@" %f, %f", location.coordinate.latitude, location.coordinate.longitude]);
+////    self.userPositionMarker.position = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
+////    self.userPositionMarker.map = self.mapView;
+//}
+//
 
 
 
@@ -201,28 +236,21 @@
         // find median
         double medianSpeed = average.doubleValue;
         double maxSpeed = max.doubleValue;
-        double minSpeed = min.doubleValue;
-//        ((NSNumber *)[sortedArray objectAtIndex:(locations.count/2)]).doubleValue;
+        double minSpeed = ABS(min.doubleValue);
         
-        // RGB for red (slowest)
-        CGFloat r_red = 1.0f;
-        CGFloat r_green = 20/255.0f;
-        CGFloat r_blue = 44/255.0f;
+        double step = (maxSpeed - minSpeed)/locations.count;
         
-        // RGB for yellow (middle)
-        CGFloat y_red = 1.0f;
-        CGFloat y_green = 215/255.0f;
-        CGFloat y_blue = 0.0f;
+        CGFloat mid = 255.0f/2/255.0f;
+        CGFloat r = 1.0f;
+        CGFloat g = 1.0f;
         
-        // RGB for green (fastest)
-        CGFloat g_red = 0.0f;
-        CGFloat g_green = 146/255.0f;
-        CGFloat g_blue = 78/255.0f;
-        
-        
+        double spedTest = 0;
+
         
         for (int i = 1; i < locations.count; i++) {
+            
             Location *firstLoc = [locations objectAtIndex:(i-1)];
+
             Location *secondLoc = [locations objectAtIndex:i];
             
             CLLocationCoordinate2D coords[2];
@@ -232,37 +260,45 @@
             coords[1].latitude = secondLoc.latitude.doubleValue;
             coords[1].longitude = secondLoc.longitude.doubleValue;
             
-            NSNumber *speed = firstLoc.speed;// [smoothSpeeds objectAtIndex:(i-1)];
+            NSNumber *speed = secondLoc.speed;// [smoothSpeeds objectAtIndex:(i-1)];
             UIColor *color = [UIColor greenColor];
-//
+
             // between red and yellow
-            if (speed.doubleValue < medianSpeed) {
-//                NSUInteger index = [sortedArray indexOfObject:speed];
-//                double ratio = (int)index / ((int)locations.count/2.0);
-                double ratio = minSpeed/medianSpeed;
-                CGFloat red = r_red + ratio * (y_red - r_red);
-                CGFloat green = r_green + ratio * (y_green - r_green);
-                CGFloat blue = r_blue + ratio * (y_blue - r_blue);
-                color = [UIColor colorWithRed:red green:green blue:blue alpha:1.0f];
-                
+            if (speed.doubleValue <= medianSpeed) {
+
+                double ratio = minSpeed*255.0f/medianSpeed;
+                color = [UIColor colorWithRed:r green:ABS(speed.doubleValue)*ratio/255.0f blue:0 alpha:1.0f];
+//                color = [UIColor colorWithRed:r green: (spedTest*ratio)/255.0f blue:0 alpha:1.0f];
                 // between yellow and green
             } else {
-//                NSUInteger index = [sortedArray indexOfObject:speed];
-//                double ratio = ((int)index - (int)locations.count/2.0) / ((int)locations.count/2.0);
-                double ratio = medianSpeed/maxSpeed;
-                CGFloat red = y_red + ratio * (g_red - y_red);
-                CGFloat green = y_green + ratio * (g_green - y_green);
-                CGFloat blue = y_blue + ratio * (g_blue - y_blue);
-                color = [UIColor colorWithRed:red green:green blue:blue alpha:1.0f];
+                double ratio = medianSpeed*255.0f/maxSpeed;
+                color = [UIColor colorWithRed:(255.0f - ABS(speed.doubleValue)*ratio)/255.0f green:1.0f blue:0 alpha:1.0f];
+//                color = [UIColor colorWithRed:(255.0-spedTest*ratio)/255.0f green:1.0f blue:0 alpha:1.0f];
             }
             
             MulticolorPolylineSegment *segment = [MulticolorPolylineSegment polylineWithCoordinates:coords count:2];
             segment.color = color;
             
             [self.colorSegments addObject:segment];
+            
         }
         
         [self.map addOverlays:self.colorSegments];
+        
+        
+        MKMapRect zoomRect = MKMapRectNull;
+        for(Location* item in locations)
+        {
+            CLLocationCoordinate2D tmp = {item.latitude.doubleValue, item.longitude.doubleValue};
+            MKMapPoint point = MKMapPointForCoordinate(tmp);
+            MKMapRect pointRect = MKMapRectMake(point.x, point.y, 0.1,0.1);
+            zoomRect = MKMapRectUnion(zoomRect, pointRect);
+        }
+        
+        double dx = zoomRect.size.width * CGRectGetWidth(self.map.bounds)/CGRectGetWidth(self.view.bounds);
+        double dy = zoomRect.size.height * CGRectGetHeight(self.map.bounds)/CGRectGetHeight(self.view.bounds);
+        zoomRect =  MKMapRectInset(zoomRect,-dx/2,-dy/2);
+        [self.map setVisibleMapRect:zoomRect animated:YES];
     }
     else{
         NSLog(@"Empty");
