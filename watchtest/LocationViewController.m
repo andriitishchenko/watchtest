@@ -161,6 +161,7 @@
 
 -(void)loadData
 {
+    [self.map setShowsUserLocation:YES];
 //    [self.map removeOverlay:self.colorSegments];
     
     for (id<MKOverlay> overlayToRemove in self.map.overlays)
