@@ -48,6 +48,9 @@
 		4AB489A11B627B140047E195 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB489A01B627B140047E195 /* Track.m */; };
 		4AB489AA1B62A8590047E195 /* MulticolorPolylineSegment.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB489A91B62A8590047E195 /* MulticolorPolylineSegment.m */; };
 		4AFDC2241B66971D0090E602 /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AFDC2231B66971D0090E602 /* Location.m */; };
+		4AFDC2261B669BC50090E602 /* Launch_plane.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AFDC2251B669BC50090E602 /* Launch_plane.png */; };
+		4AFDC2281B669DD60090E602 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AFDC2271B669DD60090E602 /* background.png */; };
+		4AFDC22A1B66A6680090E602 /* path.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AFDC2291B66A6680090E602 /* path.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -147,6 +150,9 @@
 		4AB489A91B62A8590047E195 /* MulticolorPolylineSegment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MulticolorPolylineSegment.m; sourceTree = "<group>"; };
 		4AFDC2221B66971D0090E602 /* Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Location.h; sourceTree = "<group>"; };
 		4AFDC2231B66971D0090E602 /* Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Location.m; sourceTree = "<group>"; };
+		4AFDC2251B669BC50090E602 /* Launch_plane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Launch_plane.png; sourceTree = "<group>"; };
+		4AFDC2271B669DD60090E602 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
+		4AFDC2291B66A6680090E602 /* path.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = path.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -222,6 +228,9 @@
 				4A1D9C401B6122A700AA9F21 /* Main.storyboard */,
 				4A1D9C431B6122A700AA9F21 /* Images.xcassets */,
 				4A1D9C451B6122A700AA9F21 /* LaunchScreen.xib */,
+				4AFDC2271B669DD60090E602 /* background.png */,
+				4AFDC2291B66A6680090E602 /* path.png */,
+				4AFDC2251B669BC50090E602 /* Launch_plane.png */,
 				4AB4899F1B627B140047E195 /* Track.h */,
 				4AFDC2221B66971D0090E602 /* Location.h */,
 				4AFDC2231B66971D0090E602 /* Location.m */,
@@ -470,11 +479,13 @@
 				4A1D9CAB1B614A7900AA9F21 /* Icon-Small@2x.png in Resources */,
 				4A1D9CA41B614A7900AA9F21 /* Icon-Small-20.png in Resources */,
 				4A1D9CA61B614A7900AA9F21 /* Icon-Small-30.png in Resources */,
+				4AFDC22A1B66A6680090E602 /* path.png in Resources */,
 				4A1D9CA31B614A7900AA9F21 /* Icon-72@2x.png in Resources */,
 				4A1D9C471B6122A700AA9F21 /* LaunchScreen.xib in Resources */,
 				4A1D9C9F1B614A7900AA9F21 /* apple-touch-icon-144x144-precomposed.png in Resources */,
 				4A1D9CA51B614A7900AA9F21 /* Icon-Small-20@2x.png in Resources */,
 				4A1D9C9E1B614A7900AA9F21 /* apple-touch-icon-114x114-precomposed.png in Resources */,
+				4AFDC2261B669BC50090E602 /* Launch_plane.png in Resources */,
 				4A1D9CA21B614A7900AA9F21 /* Icon-72.png in Resources */,
 				4A1D9C441B6122A700AA9F21 /* Images.xcassets in Resources */,
 				4A1D9CAD1B614A7900AA9F21 /* Icon@2x.png in Resources */,
@@ -483,6 +494,7 @@
 				4A1D9CA71B614A7900AA9F21 /* Icon-Small-30@2x.png in Resources */,
 				4A1D9CAE1B614A7900AA9F21 /* iTunesArtwork.png in Resources */,
 				4A1D9CA11B614A7900AA9F21 /* apple-touch-icon-precomposed.png in Resources */,
+				4AFDC2281B669DD60090E602 /* background.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F6a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -11,31 +10,58 @@
             <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background.png" translatesAutoresizingMaskIntoConstraints="NO" id="Af2-fg-qex">
+                    <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="path.png" translatesAutoresizingMaskIntoConstraints="NO" id="qsG-R8-1VL" userLabel="path">
+                    <rect key="frame" x="50" y="312" width="381" height="168"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="168" id="4vm-uy-Az4"/>
+                        <constraint firstAttribute="width" constant="381" id="GKv-xp-lQM"/>
+                    </constraints>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Launch_plane.png" translatesAutoresizingMaskIntoConstraints="NO" id="mBs-Lc-fea">
+                    <rect key="frame" x="80" y="65" width="320" height="228"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="320" id="KLH-gk-da2"/>
+                        <constraint firstAttribute="height" constant="228" id="iql-hm-tDh"/>
+                    </constraints>
+                </imageView>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Zg1-k8-nRF">
+                    <rect key="frame" x="222" y="322" width="37" height="37"/>
+                    <color key="color" red="0.72941176470588232" green="0.074509803921568626" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
+                </activityIndicatorView>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  Copyright (c) 2015 Andrii Tishchenko. All rights reserved." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="8ie-xW-0ye">
-                    <rect key="frame" x="20" y="439" width="441" height="21"/>
+                    <rect key="frame" x="20" y="8" width="441" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="watchtest" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="kId-c2-rCX">
-                    <rect key="frame" x="20" y="140" width="441" height="43"/>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
-                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <color key="backgroundColor" red="0.67878564620292559" green="0.67878564620292559" blue="0.67878564620292559" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="kId-c2-rCX" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="bottom" multiplier="1/3" constant="1" id="5cJ-9S-tgC"/>
-                <constraint firstAttribute="centerX" secondItem="kId-c2-rCX" secondAttribute="centerX" id="Koa-jz-hwk"/>
-                <constraint firstAttribute="bottom" secondItem="8ie-xW-0ye" secondAttribute="bottom" constant="20" id="Kzo-t9-V3l"/>
+                <constraint firstAttribute="centerX" secondItem="mBs-Lc-fea" secondAttribute="centerX" id="4s0-ZT-0N5"/>
+                <constraint firstAttribute="bottom" secondItem="Af2-fg-qex" secondAttribute="bottom" id="9av-pP-bIz"/>
+                <constraint firstAttribute="bottom" secondItem="qsG-R8-1VL" secondAttribute="bottom" id="Esc-dK-4jU"/>
+                <constraint firstAttribute="centerY" secondItem="mBs-Lc-fea" secondAttribute="centerY" constant="61" id="G7Z-1a-Slg"/>
+                <constraint firstItem="Af2-fg-qex" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Kxd-vi-ihs"/>
                 <constraint firstItem="8ie-xW-0ye" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" symbolic="YES" id="MfP-vx-nX0"/>
+                <constraint firstAttribute="trailing" secondItem="Af2-fg-qex" secondAttribute="trailing" id="Rss-mQ-9hg"/>
+                <constraint firstAttribute="centerX" secondItem="Zg1-k8-nRF" secondAttribute="centerX" id="YPk-tw-XyU"/>
                 <constraint firstAttribute="centerX" secondItem="8ie-xW-0ye" secondAttribute="centerX" id="ZEH-qu-HZ9"/>
-                <constraint firstItem="kId-c2-rCX" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" symbolic="YES" id="fvb-Df-36g"/>
+                <constraint firstItem="Zg1-k8-nRF" firstAttribute="top" secondItem="mBs-Lc-fea" secondAttribute="bottom" constant="29" id="eF1-fz-cCY"/>
+                <constraint firstItem="Af2-fg-qex" firstAttribute="top" secondItem="8ie-xW-0ye" secondAttribute="bottom" constant="-29" id="lsg-9Y-8iz"/>
+                <constraint firstAttribute="centerX" secondItem="qsG-R8-1VL" secondAttribute="centerX" id="mei-Nn-WQm"/>
+                <constraint firstItem="Af2-fg-qex" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="yMr-mE-EPu"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="548" y="455"/>
         </view>
     </objects>
+    <resources>
+        <image name="Launch_plane.png" width="581" height="380"/>
+        <image name="background.png" width="1080" height="1920"/>
+        <image name="path.png" width="1080" height="477"/>
+    </resources>
 </document>
