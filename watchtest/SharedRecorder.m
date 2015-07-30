@@ -12,6 +12,7 @@
 
 
 @implementation SharedRecorder
+@synthesize trackID=_trackID;
 
 + (SharedRecorder *)sharedInstance {
     static id sharedInstance = nil;
@@ -28,6 +29,7 @@
     
     if (self) {
         
+        self.status = NO;
     }
     
     return self;
@@ -35,18 +37,18 @@
 
 
 - (void)locationUpdated:(NSNotification*)notification {
-    [self saveLocation];
+    
+    CLLocation*location =(CLLocation*)[[notification userInfo] valueForKey:@"data"];
+    [self saveLocation:location];
 }
 
--(void)saveLocation{
-    
-    
-    if (self.trackID) {
+-(void)saveLocation:(CLLocation*)location{
+    NSLog(@"new location");
+    if (location) {
+        if (self.trackID) {
         NSManagedObjectContext *moc = [ApplicationDelegate managedObjectContext];
-        Track*track = [moc existingObjectWithID:self.trackID error:nil];
-        CLLocation *location = [SharedLocation sharedInstance].currentLocation;
-        
-        if (location) {
+        Track*track = (Track*)[moc existingObjectWithID:self.trackID error:nil];
+//        CLLocation *location = [SharedLocation sharedInstance].currentLocation;
             
             Location*item = [NSEntityDescription insertNewObjectForEntityForName:@"Location" inManagedObjectContext:moc];
             item.latitude = @(location.coordinate.latitude);
@@ -66,17 +68,28 @@
     }
 }
 
+-(void)resumeRecording{
+    if (self.status == YES) {
+        [[SharedLocation sharedInstance] startLocator];
+    }
+}
+
 -(void)startRecording{
-    SharedLocation *sm = [SharedLocation sharedInstance];
-    [sm startLocator];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(locationUpdated:) name:kLocationUpdateNotiffication object:nil];
+    if (self.trackID) {
+        self.status = YES;
+        SharedLocation *sm = [SharedLocation sharedInstance];
+        [sm startLocator];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(locationUpdated:) name:kLocationUpdateNotiffication object:nil];
+    }
 }
 
 -(void)stopRecording{
+    self.status = NO;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     SharedLocation *sm = [SharedLocation sharedInstance];
     [sm resetLocator];
+    self.trackID = nil;
 }
 -(void)dealloc
 {
@@ -86,6 +99,36 @@
     @catch (NSException *exception) {
         
     }
+}
+-(void)setTrackID:(NSManagedObjectID *)trackID
+{
+    if (trackID) {
+        [[NSUserDefaults standardUserDefaults] setURL:[trackID URIRepresentation]
+                                               forKey:@"trackID"];
+        
+    }
+    else
+    {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"trackID"];
+    }
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    _trackID = trackID;
+}
+
+-(NSManagedObjectID*)trackID
+{
+    if (_trackID) {
+        return _trackID;
+    }
+    _trackID = nil;
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"trackID"] != nil) {
+        AppDelegate*ap = ApplicationDelegate;
+        
+        NSURL *uri = [[NSUserDefaults standardUserDefaults] URLForKey:@"trackID"];
+        _trackID = [ap.persistentStoreCoordinator managedObjectIDForURIRepresentation:uri];
+    }
+    return _trackID;
 }
 
 

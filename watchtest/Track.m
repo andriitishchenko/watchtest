@@ -14,6 +14,7 @@
 
 @dynamic time;
 @dynamic waypoints;
+@dynamic title;
 
 
 - (NSArray *)sotredWaypoints

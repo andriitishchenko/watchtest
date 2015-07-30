@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4A02CD321B67F0480004CBF5 /* track.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 4A02CD311B67F0480004CBF5 /* track.gpx */; };
+		4A02CD341B68BC040004CBF5 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A02CD331B68BC040004CBF5 /* AudioToolbox.framework */; };
+		4A02CD371B69302C0004CBF5 /* UINavigationController+backhack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A02CD361B69302C0004CBF5 /* UINavigationController+backhack.m */; };
 		4A1D9C361B6122A700AA9F21 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A1D9C351B6122A700AA9F21 /* main.m */; };
 		4A1D9C391B6122A700AA9F21 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A1D9C381B6122A700AA9F21 /* AppDelegate.m */; };
 		4A1D9C3C1B6122A700AA9F21 /* watchtest.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4A1D9C3A1B6122A700AA9F21 /* watchtest.xcdatamodeld */; };
@@ -92,6 +95,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4A02CD311B67F0480004CBF5 /* track.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = track.gpx; sourceTree = "<group>"; };
+		4A02CD331B68BC040004CBF5 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		4A02CD351B69302C0004CBF5 /* UINavigationController+backhack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+backhack.h"; sourceTree = "<group>"; };
+		4A02CD361B69302C0004CBF5 /* UINavigationController+backhack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+backhack.m"; sourceTree = "<group>"; };
 		4A1D9C301B6122A700AA9F21 /* watchtest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = watchtest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A1D9C341B6122A700AA9F21 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4A1D9C351B6122A700AA9F21 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -175,6 +182,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A02CD341B68BC040004CBF5 /* AudioToolbox.framework in Frameworks */,
 				4A1D9C841B61350A00AA9F21 /* CoreLocation.framework in Frameworks */,
 				4A1D9C821B61235500AA9F21 /* WatchKit.framework in Frameworks */,
 			);
@@ -186,6 +194,8 @@
 		4A1D9C271B6122A700AA9F21 = {
 			isa = PBXGroup;
 			children = (
+				4A02CD331B68BC040004CBF5 /* AudioToolbox.framework */,
+				4A02CD311B67F0480004CBF5 /* track.gpx */,
 				4A1D9CBE1B615EB200AA9F21 /* MapKit.framework */,
 				4A1D9C831B61350A00AA9F21 /* CoreLocation.framework */,
 				4A1D9C811B61235500AA9F21 /* WatchKit.framework */,
@@ -213,6 +223,8 @@
 			children = (
 				4A1D9CB11B61511500AA9F21 /* watchtest.entitlements */,
 				4A1D9C8B1B614A7900AA9F21 /* ios Icons */,
+				4A02CD351B69302C0004CBF5 /* UINavigationController+backhack.h */,
+				4A02CD361B69302C0004CBF5 /* UINavigationController+backhack.m */,
 				4A1D9C881B613D8300AA9F21 /* SharedLocation.h */,
 				4A1D9C891B613D8300AA9F21 /* SharedLocation.m */,
 				4AB4899C1B626D590047E195 /* SharedRecorder.h */,
@@ -488,6 +500,7 @@
 				4AFDC2261B669BC50090E602 /* Launch_plane.png in Resources */,
 				4A1D9CA21B614A7900AA9F21 /* Icon-72.png in Resources */,
 				4A1D9C441B6122A700AA9F21 /* Images.xcassets in Resources */,
+				4A02CD321B67F0480004CBF5 /* track.gpx in Resources */,
 				4A1D9CAD1B614A7900AA9F21 /* Icon@2x.png in Resources */,
 				4A1D9CAF1B614A7900AA9F21 /* iTunesArtwork@2x.png in Resources */,
 				4A1D9CA91B614A7900AA9F21 /* Icon-Small-50@2x.png in Resources */,
@@ -533,6 +546,7 @@
 				4A1D9C8A1B613D8300AA9F21 /* SharedLocation.m in Sources */,
 				4A1D9C391B6122A700AA9F21 /* AppDelegate.m in Sources */,
 				4A1D9C361B6122A700AA9F21 /* main.m in Sources */,
+				4A02CD371B69302C0004CBF5 /* UINavigationController+backhack.m in Sources */,
 				4AB489AA1B62A8590047E195 /* MulticolorPolylineSegment.m in Sources */,
 				4AB4899B1B625F2C0047E195 /* TrackViewController.m in Sources */,
 				4A1D9C3F1B6122A700AA9F21 /* LocationViewController.m in Sources */,

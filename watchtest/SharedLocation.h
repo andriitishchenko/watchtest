@@ -19,11 +19,16 @@
 
 
     @property (strong,nonatomic) CLLocation *currentLocation;
+
     @property (strong,nonatomic) CLLocationManager *sharedManager;
     @property (strong,nonatomic) CLHeading *lastHeading;
     @property (strong,nonatomic) NSError* error;
     @property (nonatomic) CLLocationDirection direction;
     @property(nonatomic) BOOL status;
+
+
+
+    @property (strong,nonatomic) CLLocation *dedugcurrentLocation;
 
 +(SharedLocation *)sharedInstance ;
 +(BOOL)isServiceEnabled;
@@ -31,4 +36,8 @@
 -(void)setMapLocation:(CLLocation *)location;
 -(void)startLocator;
 -(void)resetLocator;
+
+//-(void)startBackgroundLocator;
+//-(void)startForegraundLocator;
+
 @end

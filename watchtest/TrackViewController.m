@@ -11,6 +11,7 @@
 #import "LocationViewController.h"
 @interface TrackViewController ()
         @property(strong,nonatomic) NSManagedObjectID*trackID;
+        @property(strong,nonatomic) CLGeocoder* geocoder;
 @end
 
 
@@ -92,8 +93,44 @@
     
     NSManagedObjectContext *moc = [ApplicationDelegate managedObjectContext];
     Track*item = [NSEntityDescription insertNewObjectForEntityForName:@"Track" inManagedObjectContext:moc];
-    item.time = @([[NSDate date] timeIntervalSince1970] * 1000);
+    
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    NSDate *date = [NSDate date];
+    [dateFormat setTimeZone:[NSTimeZone localTimeZone]];
+
+    item.time = @([date timeIntervalSince1970]);
+    item.title = [dateFormat stringFromDate:[NSDate date]];
     [ApplicationDelegate saveChangesInContext:moc];
+    __block NSManagedObjectID*trackid = item.objectID;
+    
+    
+    if (!self.geocoder)
+        self.geocoder = [[CLGeocoder alloc] init];
+    
+    [self.geocoder reverseGeocodeLocation:[SharedLocation sharedInstance].currentLocation completionHandler:
+     ^(NSArray* placemarks, NSError* error){
+         if ([placemarks count] > 0)
+         {
+             NSManagedObjectContext *moc = [ApplicationDelegate managedObjectContext];
+            Track*track = (Track*)[moc existingObjectWithID:trackid error:nil];
+//             NSLog(@"%@",placemarks);
+             if (track) {
+                 CLPlacemark*lc = [placemarks objectAtIndex:0];
+                 NSDictionary*adress = lc.addressDictionary;
+                 NSString  *addresstring = [[adress objectForKey:@"FormattedAddressLines"] componentsJoinedByString:@","];
+                 item.title = addresstring;
+                 [moc save:nil];
+             }
+         }
+         
+     }];
+    
+
+    
+    
+    
+//    [ApplicationDelegate saveChangesInContext:moc];
     self.trackID = item.objectID;
     [self performSegueWithIdentifier:@"showlocationcontroller" sender:sender];
 }
@@ -129,7 +166,7 @@
      Track*record = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     // Update Cell
-    [cell.textLabel setText:[record.time stringValue]];
+    [cell.textLabel setText:record.title];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

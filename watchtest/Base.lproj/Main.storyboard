@@ -16,6 +16,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" pitchEnabled="NO" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZrT-mf-E9O">
+                                <rect key="frame" x="0.0" y="64" width="600" height="437"/>
+                                <connections>
+                                    <outlet property="delegate" destination="vXZ-lx-hvc" id="zuI-71-Bdm"/>
+                                </connections>
+                            </mapView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4h1-z2-XOd">
                                 <rect key="frame" x="199" y="509" width="202" height="81"/>
                                 <subviews>
@@ -55,26 +61,20 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" pitchEnabled="NO" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZrT-mf-E9O">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="501"/>
-                                <connections>
-                                    <outlet property="delegate" destination="vXZ-lx-hvc" id="zuI-71-Bdm"/>
-                                </connections>
-                            </mapView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="4h1-z2-XOd" secondAttribute="bottom" constant="10" id="D0P-fs-u2h"/>
+                            <constraint firstItem="ZrT-mf-E9O" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" id="TMW-mv-JV8"/>
                             <constraint firstAttribute="trailing" secondItem="ZrT-mf-E9O" secondAttribute="trailing" id="VSj-LH-EsB"/>
                             <constraint firstItem="ZrT-mf-E9O" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="Zja-oh-580"/>
                             <constraint firstAttribute="centerX" secondItem="4h1-z2-XOd" secondAttribute="centerX" id="gBH-Bs-1hW"/>
                             <constraint firstItem="4h1-z2-XOd" firstAttribute="top" secondItem="ZrT-mf-E9O" secondAttribute="bottom" constant="8" id="h0M-Rx-diN"/>
-                            <constraint firstItem="ZrT-mf-E9O" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="oDb-Oe-m8b"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="buttonStart" destination="0IV-Yf-hgr" id="Dip-J8-BiZ"/>
                         <outlet property="map" destination="ZrT-mf-E9O" id="ato-FT-kDZ"/>
-                        <outlet property="view" destination="0IV-Yf-hgr" id="p5i-pH-SGP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>

@@ -10,9 +10,11 @@
 
 @interface SharedRecorder : NSObject
     @property(strong,nonatomic) NSManagedObjectID*trackID;
+    @property(nonatomic) BOOL status;
 
 
 +(SharedRecorder *)sharedInstance ;
 -(void)startRecording;
 -(void)stopRecording;
+-(void)resumeRecording;
 @end

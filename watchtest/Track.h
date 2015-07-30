@@ -14,6 +14,7 @@
 @interface Track : NSManagedObject
 
 @property (nonatomic, retain) NSNumber * time;
+@property (nonatomic, copy) NSString * title;
 @property (nonatomic, retain) NSSet *waypoints;
 @end
 

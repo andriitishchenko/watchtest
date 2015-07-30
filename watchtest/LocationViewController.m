@@ -12,10 +12,14 @@
 #import "Track.h"
 #import "Location.h"
 #import "MulticolorPolylineSegment.h"
+#import <AudioToolbox/AudioServices.h>
 
-@interface LocationViewController ()
+
+static void * const MyClassKVOContext = (void*)&MyClassKVOContext; // unique context
+
+@interface LocationViewController ()<UIGestureRecognizerDelegate>
 @property (strong, nonatomic) IBOutlet MKMapView *map;
-@property (strong, nonatomic) IBOutlet UIView *buttonStart;
+@property (strong, nonatomic) IBOutlet UIButton *buttonStart;
 
 
 //@property (nonatomic, retain) MKPolyline *routeLine; //your line
@@ -23,14 +27,75 @@
 
 @property (nonatomic, strong)  NSMutableArray *colorSegments;
 
+@property (nonatomic,strong)  NSMutableArray *livePath;
+@property (nonatomic,strong)  NSMutableArray *livePathCorected;
+
+//@property (nonatomic) BOOL autoUpdatePosition;
+
 @end
 
 @implementation LocationViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+//    self.navigationController.navigationBar.delegate = self;
+    
+    UIBarButtonItem *newBackButton = [[UIBarButtonItem alloc] initWithTitle:@"Tracks" style:UIBarButtonItemStyleBordered target:self action:@selector(home:)];
+    self.navigationItem.leftBarButtonItem=newBackButton;
+    
+//    self.autoUpdatePosition = YES;
+    [[SharedLocation sharedInstance] addObserver:self forKeyPath:@"currentLocation" options:NSKeyValueObservingOptionNew context:MyClassKVOContext];
+    [[SharedLocation sharedInstance] addObserver:self forKeyPath:@"dedugcurrentLocation" options:NSKeyValueObservingOptionNew context:MyClassKVOContext];
+    UIPanGestureRecognizer* panRec = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didDragMap:)];
+    [panRec setDelegate:self];
+    [self.map addGestureRecognizer:panRec];
+    
+    MKUserTrackingBarButtonItem *buttonItem = [[MKUserTrackingBarButtonItem alloc] initWithMapView:self.map];
+    self.navigationItem.rightBarButtonItem = buttonItem;
+    
     // Do any additional setup after loading the view, typically from a nib.
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(locationUpdated:) name:kLocationUpdateNotiffication object:nil];
+}
+
+-(void)home:(UIBarButtonItem *)sender {
+    if ([SharedRecorder sharedInstance].status == NO) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    else{
+
+            UIAlertController *alertController = [UIAlertController
+                                                  alertControllerWithTitle:NSLocalizedString(@"Action",@"Action")
+                                                  message:NSLocalizedString( @"Stop recording?",@"Stop recording?")
+                                                  preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancelAction = [UIAlertAction
+                                           actionWithTitle:NSLocalizedString(@"No", @"No")
+                                           style:UIAlertActionStyleCancel
+                                           handler:^(UIAlertAction *action)
+                                           {}];
+            
+            UIAlertAction *okAction = [UIAlertAction
+                                       actionWithTitle:NSLocalizedString(@"Yes", @"Yes")
+                                       style:UIAlertActionStyleDefault
+                                       handler:^(UIAlertAction *action)
+                                       {
+                                           [self.navigationController popViewControllerAnimated:YES];
+                                       }];
+            [alertController addAction:cancelAction];
+            [alertController addAction:okAction];
+            [self presentViewController:alertController animated:YES completion:nil];
+    }
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return YES;
+}
+
+- (void)didDragMap:(UIGestureRecognizer*)gestureRecognizer {
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded){
+//        self.autoUpdatePosition = NO;
+        
+        [self.map setUserTrackingMode:MKUserTrackingModeNone animated:YES];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -46,9 +111,9 @@
                                                   alertControllerWithTitle:NSLocalizedString(@"Action",@"Action")
                                                   message:NSLocalizedString( @"Continue or reset?",@"Continue or reset?")
                                                   preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *cancelAction = [UIAlertAction
+            UIAlertAction *resetlAction = [UIAlertAction
                                            actionWithTitle:NSLocalizedString(@"Reset", @"Reset")
-                                           style:UIAlertActionStyleCancel
+                                           style:UIAlertActionStyleDestructive
                                            handler:^(UIAlertAction *action)
                                            {
                                                NSManagedObjectContext *moc = [ApplicationDelegate managedObjectContext];
@@ -63,15 +128,27 @@
                                            }];
             
             UIAlertAction *okAction = [UIAlertAction
-                                       actionWithTitle:NSLocalizedString(@"Continue?", @"Continue?")
+                                       actionWithTitle:NSLocalizedString(@"Continue", @"Continue")
                                        style:UIAlertActionStyleDefault
                                        handler:^(UIAlertAction *action)
                                        {
                                            [self startRecordingTrack];
                                        }];
             
-            [alertController addAction:cancelAction];
+            
+            UIAlertAction *cancelAction = [UIAlertAction
+                                       actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel")
+                                       style:UIAlertActionStyleCancel
+                                       handler:^(UIAlertAction *action)
+                                       {
+
+                                       }];
+            
+
             [alertController addAction:okAction];
+            [alertController addAction:resetlAction];
+            [alertController addAction:cancelAction];
+
             [self presentViewController:alertController animated:YES completion:nil];
 
         }
@@ -79,7 +156,7 @@
             [self startRecordingTrack];
         }
         
-            [self.buttonStart setHidden:YES];
+            [self.buttonStart setEnabled:NO];
     }
 }
 
@@ -87,6 +164,16 @@
 -(void)startRecordingTrack{
     [SharedRecorder sharedInstance].trackID = self.trackID;
     [[SharedRecorder sharedInstance] startRecording];
+    [self.buttonStart setTitle:@"Running" forState:UIControlStateNormal];
+    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+    [self.map setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
+
+    self.livePath = [NSMutableArray new];
+    self.livePathCorected = [NSMutableArray new];
+    
+    
+    
+    
 }
 
 //-(void)zoomToFitMapAnnotations:(MKMapView*)mapView
@@ -121,19 +208,34 @@
 //    [mapView setRegion:region animated:YES];
 //}
 
+
+
+
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
     
-    if ([SharedLocation sharedInstance].status) {
+//    if ([SharedLocation sharedInstance].status) {
+//        [self setVisibleRegion:userLocation.location];
+//    }
+}
+
+-(void)setVisibleRegion:(CLLocation*)location
+{
+    
+//    if (self.autoUpdatePosition) {
         float spanX = 0.00725;
         float spanY = 0.00725;
-        MKCoordinateRegion region =  MKCoordinateRegionMakeWithDistance (
-                                                                         userLocation.location.coordinate, 20000, 20000);
+        //    float spanX = 0.014;
+        //    float spanY = 0.014;
+        //
+        MKCoordinateRegion region =  MKCoordinateRegionMakeWithDistance (location.coordinate, 20000, 20000);
         region.span.latitudeDelta = spanX;
         region.span.longitudeDelta = spanY;
         [self.map setRegion:region animated:NO];
-        [self.map setCenterCoordinate:userLocation.coordinate animated:YES];
-    }
+        //    [self.map setCenterCoordinate:location.coordinate animated:YES];
+        
+//    }
+
 }
 
 //- (void)locationUpdated:(NSNotification*)notification {
@@ -157,6 +259,8 @@
     [super viewWillAppear:animated];
     [self loadData];
 }
+
+
 
 
 -(void)loadData
@@ -221,7 +325,7 @@
         
         [self presentViewController:alert animated:YES completion:nil];
     }
-    else if (locations)
+    else if ([locations count]!=0)
     {
         
         self.colorSegments = [NSMutableArray array];
@@ -251,6 +355,8 @@
         for (int i = 1; i < locations.count; i++) {
             
             Location *firstLoc = [locations objectAtIndex:(i-1)];
+            
+            NSLog(@"%0.2f, %0.2f, %0.2f",firstLoc.horizontalAccuracy.doubleValue,firstLoc.direction.doubleValue, firstLoc.speed.doubleValue);
 
             Location *secondLoc = [locations objectAtIndex:i];
             
@@ -300,9 +406,12 @@
         double dy = zoomRect.size.height * CGRectGetHeight(self.map.bounds)/CGRectGetHeight(self.view.bounds);
         zoomRect =  MKMapRectInset(zoomRect,-dx/2,-dy/2);
         [self.map setVisibleMapRect:zoomRect animated:YES];
+        self.map.showsUserLocation=NO;
     }
     else{
-        NSLog(@"Empty");
+//        [self setVisibleRegion:[SharedLocation sharedInstance].currentLocation];
+//        self.map.showsUserLocation=YES;
+        [self.map setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
     }
 }
 
@@ -322,9 +431,17 @@
         MulticolorPolylineSegment *polyLine = (MulticolorPolylineSegment *)overlay;
         MKPolylineRenderer *aRenderer = [[MKPolylineRenderer alloc] initWithPolyline:polyLine];
         aRenderer.strokeColor = polyLine.color;
-        aRenderer.lineWidth = 3;
+        aRenderer.lineWidth = 1;
         return aRenderer;
     }
+    else if ([overlay isKindOfClass:[MKPolyline class]]) {
+        MKPolyline *polyLine = (MKPolyline *)overlay;
+        MKPolylineRenderer *aRenderer = [[MKPolylineRenderer alloc] initWithPolyline:polyLine];
+        aRenderer.strokeColor = [UIColor blueColor];
+        aRenderer.lineWidth = 1;
+        return aRenderer;
+    }
+
     return nil;
 }
 
@@ -352,7 +469,138 @@
 {
     [super viewWillDisappear:animated];
     [[SharedRecorder sharedInstance] stopRecording];
-    
 }
+
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if([keyPath isEqualToString:@"currentLocation"]) {
+        if([object valueForKeyPath:keyPath] != [NSNull null]) {
+            CLLocation*location = (CLLocation*)[object valueForKeyPath:keyPath];
+            [self drawLine:location];
+        }
+    }
+    
+    if([keyPath isEqualToString:@"dedugcurrentLocation"]) {
+        if([object valueForKeyPath:keyPath] != [NSNull null]) {
+            CLLocation*location = (CLLocation*)[object valueForKeyPath:keyPath];
+            
+            if (location) {
+                [self drawLineCorected:location];
+            }
+            else
+            {
+                NSLog(@"NIL LOCATION!!!");
+            }
+
+        }
+    }
+}
+
+
+- (void)dealloc
+{
+//    if ([self observationInfo]) {
+        @try {
+            [[SharedLocation sharedInstance] removeObserver:self forKeyPath:@"currentLocation" context:MyClassKVOContext];
+            
+            [[SharedLocation sharedInstance] removeObserver:self forKeyPath:@"dedugcurrentLocation" context:MyClassKVOContext];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"%@",[exception description] );
+        }
+//    }
+}
+
+
+-(void)drawLine:(CLLocation*)newLocation
+{
+    NSInteger cnt = [self.livePath count];
+    if (cnt>0) {
+        CLLocation* oldLocation = [self.livePath lastObject];
+        CLLocationCoordinate2D coords[2];
+        coords[0] = oldLocation.coordinate;
+        coords[1] = newLocation.coordinate;
+        
+//        MKCoordinateRegion region =
+//        MKCoordinateRegionMakeWithDistance(newLocation.coordinate, 500, 500);
+//        [self.mapView setRegion:region animated:YES];
+        
+        [self.map addOverlay:[MKPolyline polylineWithCoordinates:coords count:2]];
+        
+        [self.livePath removeObjectAtIndex:0];
+    }
+    if (self.livePath) {
+        [self.livePath addObject:newLocation];
+    }
+}
+
+-(void)drawLineCorected:(CLLocation*)newLocation
+{
+    NSInteger cnt = [self.livePathCorected count];
+    if (cnt>0) {
+        CLLocation* oldLocation = [self.livePathCorected lastObject];
+        CLLocationCoordinate2D coords[2];
+        coords[0] = oldLocation.coordinate;
+        coords[1] = newLocation.coordinate;
+        [self.map addOverlay:[MulticolorPolylineSegment polylineWithCoordinates:coords count:2]];
+        [self.livePathCorected removeObjectAtIndex:0];
+    }
+    if (self.livePathCorected) {
+        [self.livePathCorected addObject:newLocation];
+    }
+}
+
+//
+//- (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item {
+//    //handle the action here
+//    return YES;
+//    if ([SharedRecorder sharedInstance].status == NO) {
+//        return YES;
+//    }
+//    else{
+////    __block BOOL rez = NO;
+////    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+//        
+//        
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//                           UIAlertController *alertController = [UIAlertController
+//                                                                 alertControllerWithTitle:NSLocalizedString(@"Action",@"Action")
+//                                                                 message:NSLocalizedString( @"Stop recording?",@"Stop recording?")
+//                                                                 preferredStyle:UIAlertControllerStyleAlert];
+//                           UIAlertAction *cancelAction = [UIAlertAction
+//                                                          actionWithTitle:NSLocalizedString(@"No", @"No")
+//                                                          style:UIAlertActionStyleCancel
+//                                                          handler:^(UIAlertAction *action)
+//                                                          {
+////                                                              dispatch_semaphore_signal(semaphore);
+//                                                          }];
+//                           
+//                           UIAlertAction *okAction = [UIAlertAction
+//                                                      actionWithTitle:NSLocalizedString(@"Yes", @"Yes")
+//                                                      style:UIAlertActionStyleDefault
+//                                                      handler:^(UIAlertAction *action)
+//                                                      {
+//                                                          dispatch_async(dispatch_get_main_queue(), ^(){
+//                                                              
+//                                                              [self.navigationController popViewControllerAnimated:YES];
+//                                                              
+//                                                          });
+////                                                          rez = YES;
+////                                                          dispatch_semaphore_signal(semaphore);
+//                                                      }];
+//                           [alertController addAction:cancelAction];
+//                           [alertController addAction:okAction];
+//                           dispatch_async(dispatch_get_main_queue(), ^(){
+//
+//                               [self presentViewController:alertController animated:YES completion:nil];
+//                               
+//                            });
+////            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+//        });
+//        
+//
+//    return NO;
+//    }
+//}
 
 @end

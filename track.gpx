@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="Maprika http://www.maprika.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.topografix.com/GPX/1/1" xmlns:topografix="http://www.topografix.com/GPX/Private/TopoGrafix/0/1" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.topografix.com/GPX/Private/TopoGrafix/0/1 http://www.topografix.com/GPX/Private/TopoGrafix/0/1/topografix.xsd">
+<trk>
+<name><![CDATA[shop 500m]]></name>
+<desc><![CDATA[28 лип. 2015 19:31;
+550m in 36 min 52 sec;
+Average moving 3.2km/h, Max 10.3km/h;
+]]></desc>
+<trkseg>
+<trkpt lat="50.452819" lon="30.478054"><time>2015-07-28T16:31:27Z</time></trkpt>
+<trkpt lat="50.452649" lon="30.478476"><time>2015-07-28T17:01:06Z</time></trkpt>
+<trkpt lat="50.452807" lon="30.478014"><time>2015-07-28T17:01:10Z</time></trkpt>
+<trkpt lat="50.452998" lon="30.478025"><time>2015-07-28T17:01:24Z</time></trkpt>
+<trkpt lat="50.453094" lon="30.478022"><time>2015-07-28T17:01:31Z</time></trkpt>
+<trkpt lat="50.453279" lon="30.478070"><time>2015-07-28T17:01:45Z</time></trkpt>
+<trkpt lat="50.453443" lon="30.478197"><time>2015-07-28T17:01:58Z</time></trkpt>
+<trkpt lat="50.453620" lon="30.478285"><time>2015-07-28T17:02:11Z</time></trkpt>
+<trkpt lat="50.453790" lon="30.478409"><time>2015-07-28T17:02:24Z</time></trkpt>
+<trkpt lat="50.453963" lon="30.478524"><time>2015-07-28T17:02:37Z</time></trkpt>
+<trkpt lat="50.454147" lon="30.478610"><time>2015-07-28T17:02:52Z</time></trkpt>
+<trkpt lat="50.454323" lon="30.478725"><time>2015-07-28T17:03:07Z</time></trkpt>
+<trkpt lat="50.454481" lon="30.478869"><time>2015-07-28T17:03:31Z</time></trkpt>
+<trkpt lat="50.454315" lon="30.478745"><time>2015-07-28T17:05:42Z</time></trkpt>
+<trkpt lat="50.454154" lon="30.478609"><time>2015-07-28T17:05:50Z</time></trkpt>
+<trkpt lat="50.454060" lon="30.478549"><time>2015-07-28T17:05:55Z</time></trkpt>
+<trkpt lat="50.453969" lon="30.478501"><time>2015-07-28T17:06:01Z</time></trkpt>
+<trkpt lat="50.453868" lon="30.478476"><time>2015-07-28T17:06:08Z</time></trkpt>
+<trkpt lat="50.453771" lon="30.478485"><time>2015-07-28T17:06:15Z</time></trkpt>
+<trkpt lat="50.453680" lon="30.478444"><time>2015-07-28T17:06:22Z</time></trkpt>
+<trkpt lat="50.453495" lon="30.478428"><time>2015-07-28T17:06:39Z</time></trkpt>
+<trkpt lat="50.453307" lon="30.478354"><time>2015-07-28T17:06:52Z</time></trkpt>
+<trkpt lat="50.453126" lon="30.478307"><time>2015-07-28T17:07:05Z</time></trkpt>
+<trkpt lat="50.452940" lon="30.478287"><time>2015-07-28T17:07:18Z</time></trkpt>
+<trkpt lat="50.452772" lon="30.478181"><time>2015-07-28T17:07:29Z</time></trkpt>
+<trkpt lat="50.452614" lon="30.478022"><time>2015-07-28T17:07:41Z</time></trkpt>
+<trkpt lat="50.452656" lon="30.477744"><time>2015-07-28T17:08:00Z</time></trkpt>
+<trkpt lat="50.452564" lon="30.477494"><time>2015-07-28T17:08:20Z</time></trkpt>
+</trkseg>
+</trk>
+</gpx>

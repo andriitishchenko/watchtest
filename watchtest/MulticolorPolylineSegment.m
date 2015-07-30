@@ -9,5 +9,15 @@
 #import "MulticolorPolylineSegment.h"
 
 @implementation MulticolorPolylineSegment
+@synthesize color=_color;
+
+
+-(UIColor*)color
+{
+    if (!_color) {
+        _color = [UIColor greenColor];
+    }
+    return _color;
+}
 
 @end
