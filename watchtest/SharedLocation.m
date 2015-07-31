@@ -153,7 +153,7 @@ typedef NS_ENUM(NSUInteger, GeolocationCgenType) {
         self.sharedManager.delegate = self;
         self.sharedManager.distanceFilter = kCLDistanceFilterNone;
 
-//        self.sharedManager.pausesLocationUpdatesAutomatically = NO;
+        self.sharedManager.pausesLocationUpdatesAutomatically = NO;
         self.sharedManager.activityType = CLActivityTypeFitness;
         
 
