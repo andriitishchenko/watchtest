@@ -3,7 +3,7 @@
 //  ???
 //
 //  Created by AndruX on 5/5/13.
-//  Copyright (c) 2013 cpcs. All rights reserved.
+//  Copyright (c) 2015 . All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

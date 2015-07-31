@@ -3,7 +3,7 @@
 //  ??
 //
 //  Created by AndruX on 5/5/13.
-//  Copyright (c) 2013 cpcs. All rights reserved.
+//  Copyright (c) 2015 . All rights reserved.
 //
 
 #import "SharedLocation.h"
@@ -17,7 +17,7 @@ static const NSInteger R = 6371007.2;// 6371000;
 #define MID(value1,value2)((value1+value2)/2)
 
 #define FILTERhorizontalAccuracy 60.0f
-
+#define FILTERDistanceAccuracy 10.0f
 @interface CLLocation (Direction)
 - (CLLocationDirection)directionToLocation:(CLLocation *)location;
 - (CLLocation *)midpointWithLocation:(const CLLocation *)location;
@@ -148,17 +148,18 @@ typedef NS_ENUM(NSUInteger, GeolocationCgenType) {
         self.status = NO;
         self.dynamicAccuracy = FILTERhorizontalAccuracy;
         self.sharedManager = [CLLocationManager new];
-        self.sharedManager.delegate = self;
-        self.sharedManager.distanceFilter = 10;
-//#if DEBUG
-//        self.sharedManager.desiredAccuracy = kCLLocationAccuracyBest;
-//#else
-        self.sharedManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-//#endif
+        self.sharedManager.desiredAccuracy = kCLLocationAccuracyBest;
         self.sharedManager.headingFilter = 5;
+        self.sharedManager.delegate = self;
+        self.sharedManager.distanceFilter = kCLDistanceFilterNone;
+
+//        self.sharedManager.pausesLocationUpdatesAutomatically = NO;
+        self.sharedManager.activityType = CLActivityTypeFitness;
+        
+
         self.direction = -1;
         
-        [self.sharedManager allowDeferredLocationUpdatesUntilTraveled:10 timeout:CLTimeIntervalMax];
+
         
 
 //#if DEBUG
@@ -227,19 +228,20 @@ typedef NS_ENUM(NSUInteger, GeolocationCgenType) {
 {
     [self resetLocator];
      UIApplication* app = [UIApplication sharedApplication];
-    
-
     if ([SharedLocation isServiceEnabled]==YES) {
         self.rawData = [NSMutableArray new];
         self.status = YES;
         
         if([app applicationState]==UIApplicationStateActive){
             [self.sharedManager startUpdatingLocation];
-            [self.sharedManager startUpdatingHeading];
+//            [self.sharedManager startUpdatingHeading];
+            self.sharedManager.distanceFilter = FILTERDistanceAccuracy;
         }
         else
         {
             [self.sharedManager startMonitoringSignificantLocationChanges];
+            [self.sharedManager allowDeferredLocationUpdatesUntilTraveled:10 timeout:CLTimeIntervalMax];
+
         }
     }
 }
@@ -252,16 +254,17 @@ typedef NS_ENUM(NSUInteger, GeolocationCgenType) {
     if(self.sharedManager)
     {
         [self.rawData removeAllObjects];
-        
-        
+
         if([app applicationState]==UIApplicationStateActive){
-            [self.sharedManager stopUpdatingHeading];
+//            [self.sharedManager stopUpdatingHeading];
             [self.sharedManager stopUpdatingLocation];
         }
         else
         {
+            [self.sharedManager disallowDeferredLocationUpdates];
             [self.sharedManager stopMonitoringSignificantLocationChanges];
         }
+        self.sharedManager.distanceFilter = kCLDistanceFilterNone;
     }
 }
 
@@ -411,7 +414,7 @@ typedef NS_ENUM(NSUInteger, GeolocationCgenType) {
         [self processDebugLocation:location];
         
         
-        if (location.speed<=0) {
+        if (location.speed<=0 ||  location.course<=0 || location.horizontalAccuracy>FILTERhorizontalAccuracy) {
             if (!self.rawUndefinedLocation) {
                 self.rawUndefinedLocation = location;
                 continue;
@@ -440,7 +443,13 @@ typedef NS_ENUM(NSUInteger, GeolocationCgenType) {
 //    return;
     ////debug
     
-    
+//    UIApplication* app = [UIApplication sharedApplication];
+//    if([app applicationState]==UIApplicationStateActive){
+//
+//    }
+//    else{
+//        [self.sharedManager allowDeferredLocationUpdatesUntilTraveled:10 timeout:CLTimeIntervalMax];
+//    }
    
     
 //    ALog(@"Your location: lat %f - lon %f", self.currentLocation.coordinate.latitude, self.currentLocation.coordinate.longitude);
@@ -473,7 +482,7 @@ typedef NS_ENUM(NSUInteger, GeolocationCgenType) {
         self.currentLocation = [[CLLocation alloc] initWithLatitude:0 longitude:0];
     }
 
-    [self resetLocator];
+//    [self resetLocator];
     [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(restartLocator:) userInfo:nil repeats:NO];
 
 }
@@ -507,6 +516,42 @@ typedef NS_ENUM(NSUInteger, GeolocationCgenType) {
 }
 
 
+- (void)locationManager:(CLLocationManager *)manager didFinishDeferredUpdatesWithError:(NSError *)error
+{
+    NSLog(@"ERROR didFinishDeferredUpdatesWithError: %@", [error localizedDescription]);
+    
+    UIApplication* app = [UIApplication sharedApplication];
+    
+    
+    if([app applicationState]==UIApplicationStateActive){
+        [self.sharedManager disallowDeferredLocationUpdates];
+    }
+    else{
+        if (error.code == kCLErrorDeferredFailed) {
+//            double delayInSeconds = 5.0;
+//            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+//            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+//                [self.sharedManager allowDeferredLocationUpdatesUntilTraveled:10 timeout:CLTimeIntervalMax];
+//            });
+        }
+        else if(error.code == kCLErrorDeferredCanceled) {
+            NSLog(@"kCLErrorDeferredCanceled");
+        }
+    }
+    
+    if (!error) {
+        NSLog(@"NO ==================ERROR UPDATE");
+    }
+}
+
+- (void)locationManagerDidPauseLocationUpdates:(CLLocationManager *)manager
+{
+NSLog(@"+++++++ PAUSE");
+}
+- (void)locationManagerDidResumeLocationUpdates:(CLLocationManager *)manager
+{
+NSLog(@"+++++++ Resume");
+}
 //-(void)startBackgroundLocator{
 //    if (self.status == YES) {
 //        [self resetLocator];
