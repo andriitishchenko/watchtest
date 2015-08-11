@@ -40,7 +40,7 @@ static void * const MyClassKVOContext = (void*)&MyClassKVOContext; // unique con
     [super viewDidLoad];
 //    self.navigationController.navigationBar.delegate = self;
     
-    UIBarButtonItem *newBackButton = [[UIBarButtonItem alloc] initWithTitle:@"Tracks" style:UIBarButtonItemStyleBordered target:self action:@selector(home:)];
+    UIBarButtonItem *newBackButton = [[UIBarButtonItem alloc] initWithTitle:@"Tracks" style:UIBarButtonItemStylePlain target:self action:@selector(home:)];
     self.navigationItem.leftBarButtonItem=newBackButton;
     
 //    self.autoUpdatePosition = YES;
@@ -116,13 +116,13 @@ static void * const MyClassKVOContext = (void*)&MyClassKVOContext; // unique con
                                            style:UIAlertActionStyleDestructive
                                            handler:^(UIAlertAction *action)
                                            {
-                                               NSManagedObjectContext *moc = [ApplicationDelegate managedObjectContext];
+                                               NSManagedObjectContext *moc = [SharedRecorder managedObjectContext];
                                                NSError *error;
                                                Track*track = (Track*)[moc existingObjectWithID:self.trackID error:&error];
                                                for (Location *items in track.waypoints) {
                                                    [moc deleteObject:items];
                                                }
-                                               [ApplicationDelegate saveChangesInContext:moc];
+                                               [SharedRecorder saveChanges:moc];
                                                [self startRecordingTrack];
                                                [self loadData];
                                            }];
@@ -356,7 +356,11 @@ static void * const MyClassKVOContext = (void*)&MyClassKVOContext; // unique con
             
             Location *firstLoc = [locations objectAtIndex:(i-1)];
             
-            NSLog(@"%0.2f, %0.2f, %0.2f",firstLoc.horizontalAccuracy.doubleValue,firstLoc.direction.doubleValue, firstLoc.speed.doubleValue);
+            NSLog(@"hA=%4.2f, Di=%4.2f,  Alt=%4.2f, Sp=%4.2f",
+                  firstLoc.horizontalAccuracy.doubleValue,
+                  firstLoc.direction.doubleValue,
+                  firstLoc.altitude.doubleValue,
+                  firstLoc.speed.doubleValue);
 
             Location *secondLoc = [locations objectAtIndex:i];
             
@@ -407,6 +411,8 @@ static void * const MyClassKVOContext = (void*)&MyClassKVOContext; // unique con
         zoomRect =  MKMapRectInset(zoomRect,-dx/2,-dy/2);
         [self.map setVisibleMapRect:zoomRect animated:YES];
         self.map.showsUserLocation=NO;
+        
+        [self slopesDetect:locations];
     }
     else{
 //        [self setVisibleRegion:[SharedLocation sharedInstance].currentLocation];
@@ -602,5 +608,30 @@ static void * const MyClassKVOContext = (void*)&MyClassKVOContext; // unique con
 //    return NO;
 //    }
 //}
+
+-(void)slopesDetect:(NSArray*)list{
+    
+    NSInteger count =0;
+    
+    if (list && [list count] > 0) {
+        double minalt = 0; //((Location*)[list firstObject]).altitude.doubleValue;
+        double maxalt = ((Location*)[list firstObject]).altitude.doubleValue;
+        for (Location*item in list) {
+            if (item.altitude.doubleValue < maxalt) {
+                if (minalt == 0) {
+                    count++;
+                }
+                minalt = item.altitude.doubleValue;
+            }
+            else
+            {
+//                maxalt = item.altitude.doubleValue;
+                minalt = 0;
+            }
+            maxalt = item.altitude.doubleValue;
+        }
+    }
+    NSLog(@"Count= %ld",(long)count);
+}
 
 @end

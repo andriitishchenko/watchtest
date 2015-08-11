@@ -46,7 +46,7 @@
     NSLog(@"new location");
     if (location) {
         if (self.trackID) {
-        NSManagedObjectContext *moc = [ApplicationDelegate managedObjectContext];
+        NSManagedObjectContext *moc = [SharedRecorder managedObjectContext];
         Track*track = (Track*)[moc existingObjectWithID:self.trackID error:nil];
 //        CLLocation *location = [SharedLocation sharedInstance].currentLocation;
             
@@ -63,7 +63,7 @@
             
             [track addWaypointsObject:item];
             
-            [ApplicationDelegate saveChangesInContext:moc];
+            [SharedRecorder saveChanges:moc];
         }
     }
 }
@@ -131,6 +131,39 @@
     return _trackID;
 }
 
++(NSManagedObjectContext *)managedObjectContext{
+    NSManagedObjectContext *moc;
+    if ([NSThread isMainThread]) {
+        moc = [ApplicationDelegate managedObjectContext];
+    }
+    else{
+    
+    NSPersistentStoreCoordinator *coordinator = [ApplicationDelegate  persistentStoreCoordinator];
+    if (!coordinator) {
+        return nil;
+    }
+    moc = [[NSManagedObjectContext alloc] init];
+        [moc setPersistentStoreCoordinator:coordinator];
+    }
+    return moc;
+}
 
+
++ (void)saveChanges:(NSManagedObjectContext *)managedObjectContext
+{
+    NSError *error = nil;
+    if ([NSThread isMainThread]) {
+        [ApplicationDelegate saveContext];
+    }
+    else{
+        if ([managedObjectContext hasChanges] && [managedObjectContext save:&error]) {
+            NSLog(@"CORE saveContext YES");
+        }
+        if (error!=nil) {
+            NSLog(@"CORE saveContext NO with error: %@, %@", error, [error userInfo]);
+        }
+    }
+    
+}
 
 @end

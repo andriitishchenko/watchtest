@@ -67,20 +67,6 @@
 }
 
 
-- (void)saveChangesInContext:(NSManagedObjectContext *)managedObjectContext
-{
-    NSError *error = nil;
-    if ([managedObjectContext hasChanges] && [managedObjectContext save:&error]) {
-        NSLog(@"CORE saveContext YES");
-    }
-    if (error!=nil) {
-        NSLog(@"CORE saveContext NO with error: %@, %@", error, [error userInfo]);
-    }
-    else{
-        [self saveContext];
-    }
-    
-}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -152,6 +138,8 @@
 
 - (NSURL *)applicationDocumentsDirectory {
     // The directory the application uses to store the Core Data store file. This code uses a directory named "com.watchtest" in the application's documents directory.
+    NSLog(@"%@",[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory  inDomains:NSUserDomainMask] lastObject]);
+
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 

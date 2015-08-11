@@ -14,6 +14,8 @@
 
 
 +(SharedRecorder *)sharedInstance ;
++(NSManagedObjectContext *)managedObjectContext;
++(void)saveChanges:(NSManagedObjectContext *)managedObjectContext;
 -(void)startRecording;
 -(void)stopRecording;
 -(void)resumeRecording;

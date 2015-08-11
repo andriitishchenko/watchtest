@@ -23,7 +23,7 @@
 - (NSURL *)applicationDocumentsDirectory;
 
 -(void)saveLocation;
-- (void)saveChangesInContext:(NSManagedObjectContext *)managedObjectContext;
+//- (void)saveChangesInContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end
 

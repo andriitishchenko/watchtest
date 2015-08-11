@@ -16,7 +16,8 @@ static const NSInteger R = 6371007.2;// 6371000;
 #define DEG_TO_RAD(angle) ((angle) / 180.0 * M_PI)
 #define MID(value1,value2)((value1+value2)/2)
 
-#define FILTERhorizontalAccuracy 60.0f
+#define FILTERhorizontalAccuracy 49.0f
+#define FILTERspeed 0.5f
 #define FILTERDistanceAccuracy 10.0f
 @interface CLLocation (Direction)
 - (CLLocationDirection)directionToLocation:(CLLocation *)location;
@@ -413,8 +414,9 @@ typedef NS_ENUM(NSUInteger, GeolocationCgenType) {
         self.currentLocation = location;
         [self processDebugLocation:location];
         
-        
-        if (location.speed<=0 ||  location.course<=0 || location.horizontalAccuracy>FILTERhorizontalAccuracy) {
+        if (location.speed <= FILTERspeed ||
+            location.course <= 0 ||
+            location.horizontalAccuracy>FILTERhorizontalAccuracy ) {
             if (!self.rawUndefinedLocation) {
                 self.rawUndefinedLocation = location;
                 continue;
@@ -427,11 +429,11 @@ typedef NS_ENUM(NSUInteger, GeolocationCgenType) {
         }
         else
         {
-            if (self.rawUndefinedLocation) {
-                self.currentLocation = self.rawUndefinedLocation;
-                [[NSNotificationCenter defaultCenter] postNotificationName:kLocationUpdateNotiffication object:nil userInfo:@{@"data":[self.rawUndefinedLocation copy]}];
-                self.rawUndefinedLocation = nil;
-            }
+//            if (self.rawUndefinedLocation) {
+//                self.currentLocation = self.rawUndefinedLocation;
+//                [[NSNotificationCenter defaultCenter] postNotificationName:kLocationUpdateNotiffication object:nil userInfo:@{@"data":[self.rawUndefinedLocation copy]}];
+//                self.rawUndefinedLocation = nil;
+//            }
             
             [[NSNotificationCenter defaultCenter] postNotificationName:kLocationUpdateNotiffication object:nil userInfo:@{@"data":location}];
         }

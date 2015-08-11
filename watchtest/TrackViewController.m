@@ -35,7 +35,7 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"New", @"New")
                                                                               style:UIBarButtonItemStylePlain target:self action:@selector(actionNewRecord:)];
     
-    NSManagedObjectContext *moc = [ApplicationDelegate managedObjectContext];
+    NSManagedObjectContext *moc = [SharedRecorder managedObjectContext];
     
     // Initialize Fetch Request
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Track"];
@@ -91,7 +91,7 @@
 
 -(IBAction)actionNewRecord:(id)sender{
     
-    NSManagedObjectContext *moc = [ApplicationDelegate managedObjectContext];
+    NSManagedObjectContext *moc = [SharedRecorder managedObjectContext];
     Track*item = [NSEntityDescription insertNewObjectForEntityForName:@"Track" inManagedObjectContext:moc];
     
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
@@ -101,7 +101,7 @@
 
     item.time = @([date timeIntervalSince1970]);
     item.title = [dateFormat stringFromDate:[NSDate date]];
-    [ApplicationDelegate saveChangesInContext:moc];
+    [SharedRecorder saveChanges:moc];
     __block NSManagedObjectID*trackid = item.objectID;
     
     
@@ -112,7 +112,7 @@
      ^(NSArray* placemarks, NSError* error){
          if ([placemarks count] > 0)
          {
-             NSManagedObjectContext *moc = [ApplicationDelegate managedObjectContext];
+             NSManagedObjectContext *moc = [SharedRecorder managedObjectContext];
             Track*track = (Track*)[moc existingObjectWithID:trackid error:nil];
 //             NSLog(@"%@",placemarks);
              if (track) {
@@ -120,7 +120,7 @@
                  NSDictionary*adress = lc.addressDictionary;
                  NSString  *addresstring = [[adress objectForKey:@"FormattedAddressLines"] componentsJoinedByString:@","];
                  item.title = addresstring;
-                 [moc save:nil];
+                 [SharedRecorder saveChanges:moc];
              }
          }
          
