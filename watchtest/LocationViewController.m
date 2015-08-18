@@ -330,38 +330,10 @@ static void * const MyClassKVOContext = (void*)&MyClassKVOContext; // unique con
         
         self.colorSegments = [NSMutableArray array];
         
-        
-        NSNumber *average = [locations valueForKeyPath:@"@avg.speed"];
-        NSNumber *max = [locations valueForKeyPath:@"@max.speed"];
-        NSNumber *min = [locations valueForKeyPath:@"@min.speed"];
-        
-//        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"" argumentArray:<#(NSArray *)#>
-                                  ////                              @"(lastName LIKE[c] 'Worsley') AND (salary > %@)", minimumSalary];
-        
-        // find median
-        double medianSpeed = average.doubleValue;
-        double maxSpeed = max.doubleValue;
-        double minSpeed = ABS(min.doubleValue);
-        
-        double step = (maxSpeed - minSpeed)/locations.count;
-        
-        CGFloat mid = 255.0f/2/255.0f;
-        CGFloat r = 1.0f;
-        CGFloat g = 1.0f;
-        
-        double spedTest = 0;
-
-        
+        NSArray*slopes = [self slopesDetect:locations];
         for (int i = 1; i < locations.count; i++) {
-            
+        
             Location *firstLoc = [locations objectAtIndex:(i-1)];
-            
-            NSLog(@"hA=%4.2f, Di=%4.2f,  Alt=%4.2f, Sp=%4.2f",
-                  firstLoc.horizontalAccuracy.doubleValue,
-                  firstLoc.direction.doubleValue,
-                  firstLoc.altitude.doubleValue,
-                  firstLoc.speed.doubleValue);
-
             Location *secondLoc = [locations objectAtIndex:i];
             
             CLLocationCoordinate2D coords[2];
@@ -371,28 +343,83 @@ static void * const MyClassKVOContext = (void*)&MyClassKVOContext; // unique con
             coords[1].latitude = secondLoc.latitude.doubleValue;
             coords[1].longitude = secondLoc.longitude.doubleValue;
             
-            NSNumber *speed = secondLoc.speed;// [smoothSpeeds objectAtIndex:(i-1)];
-            UIColor *color = [UIColor greenColor];
-
-            // between red and yellow
-            if (speed.doubleValue <= medianSpeed) {
-
-                double ratio = minSpeed*255.0f/medianSpeed;
-                color = [UIColor colorWithRed:r green:ABS(speed.doubleValue)*ratio/255.0f blue:0 alpha:1.0f];
-//                color = [UIColor colorWithRed:r green: (spedTest*ratio)/255.0f blue:0 alpha:1.0f];
-                // between yellow and green
-            } else {
-                double ratio = medianSpeed*255.0f/maxSpeed;
-                color = [UIColor colorWithRed:(255.0f - ABS(speed.doubleValue)*ratio)/255.0f green:1.0f blue:0 alpha:1.0f];
-//                color = [UIColor colorWithRed:(255.0-spedTest*ratio)/255.0f green:1.0f blue:0 alpha:1.0f];
-            }
+//            NSNumber *speed = secondLoc.speed;// [smoothSpeeds objectAtIndex:(i-1)];
+            UIColor *color = [UIColor redColor];
             
+            if ([slopes containsObject:@(i)]) {
+                color = [UIColor greenColor];
+            }
             MulticolorPolylineSegment *segment = [MulticolorPolylineSegment polylineWithCoordinates:coords count:2];
             segment.color = color;
-            
             [self.colorSegments addObject:segment];
-            
         }
+        
+//        
+//        
+//        
+//        
+//        NSNumber *average = [locations valueForKeyPath:@"@avg.speed"];
+//        NSNumber *max = [locations valueForKeyPath:@"@max.speed"];
+//        NSNumber *min = [locations valueForKeyPath:@"@min.speed"];
+//        
+////        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"" argumentArray:<#(NSArray *)#>
+//                                  ////                              @"(lastName LIKE[c] 'Worsley') AND (salary > %@)", minimumSalary];
+//        
+//        // find median
+//        double medianSpeed = average.doubleValue;
+//        double maxSpeed = max.doubleValue;
+//        double minSpeed = ABS(min.doubleValue);
+//        
+//        double step = (maxSpeed - minSpeed)/locations.count;
+//        
+//        CGFloat mid = 255.0f/2/255.0f;
+//        CGFloat r = 1.0f;
+//        CGFloat g = 1.0f;
+//        
+//        double spedTest = 0;
+//
+//        
+//        for (int i = 1; i < locations.count; i++) {
+//            
+//            Location *firstLoc = [locations objectAtIndex:(i-1)];
+//            
+//            NSLog(@"hA=%4.2f, Di=%4.2f,  Alt=%4.2f, Sp=%4.2f",
+//                  firstLoc.horizontalAccuracy.doubleValue,
+//                  firstLoc.direction.doubleValue,
+//                  firstLoc.altitude.doubleValue,
+//                  firstLoc.speed.doubleValue);
+//
+//            Location *secondLoc = [locations objectAtIndex:i];
+//            
+//            CLLocationCoordinate2D coords[2];
+//            coords[0].latitude = firstLoc.latitude.doubleValue;
+//            coords[0].longitude = firstLoc.longitude.doubleValue;
+//            
+//            coords[1].latitude = secondLoc.latitude.doubleValue;
+//            coords[1].longitude = secondLoc.longitude.doubleValue;
+//            
+//            NSNumber *speed = secondLoc.speed;// [smoothSpeeds objectAtIndex:(i-1)];
+//            UIColor *color = [UIColor greenColor];
+//
+//            // between red and yellow
+//            if (speed.doubleValue <= medianSpeed) {
+//
+//                double ratio = minSpeed*255.0f/medianSpeed;
+//                color = [UIColor colorWithRed:r green:ABS(speed.doubleValue)*ratio/255.0f blue:0 alpha:1.0f];
+////                color = [UIColor colorWithRed:r green: (spedTest*ratio)/255.0f blue:0 alpha:1.0f];
+//                // between yellow and green
+//            } else {
+//                double ratio = medianSpeed*255.0f/maxSpeed;
+//                color = [UIColor colorWithRed:(255.0f - ABS(speed.doubleValue)*ratio)/255.0f green:1.0f blue:0 alpha:1.0f];
+////                color = [UIColor colorWithRed:(255.0-spedTest*ratio)/255.0f green:1.0f blue:0 alpha:1.0f];
+//            }
+//            
+//            MulticolorPolylineSegment *segment = [MulticolorPolylineSegment polylineWithCoordinates:coords count:2];
+//            segment.color = color;
+//            
+//            [self.colorSegments addObject:segment];
+//            
+//        }
         
         [self.map addOverlays:self.colorSegments];
         
@@ -412,7 +439,7 @@ static void * const MyClassKVOContext = (void*)&MyClassKVOContext; // unique con
         [self.map setVisibleMapRect:zoomRect animated:YES];
         self.map.showsUserLocation=NO;
         
-        [self slopesDetect:locations];
+
     }
     else{
 //        [self setVisibleRegion:[SharedLocation sharedInstance].currentLocation];
@@ -609,29 +636,103 @@ static void * const MyClassKVOContext = (void*)&MyClassKVOContext; // unique con
 //    }
 //}
 
--(void)slopesDetect:(NSArray*)list{
+-(NSArray*)slopesDetect:(NSArray*)list{
     
-    NSInteger count =0;
+    //5 meter slope
+    // find min and max, then devide for pices of 5 meter slopes
+    double slopeHeigth = 5.0;
+    NSMutableArray*rez = [NSMutableArray new];
     
-    if (list && [list count] > 0) {
-        double minalt = 0; //((Location*)[list firstObject]).altitude.doubleValue;
-        double maxalt = ((Location*)[list firstObject]).altitude.doubleValue;
-        for (Location*item in list) {
-            if (item.altitude.doubleValue < maxalt) {
-                if (minalt == 0) {
-                    count++;
+//    NSNumber *average = [list valueForKeyPath:@"@avg.speed"];
+    NSNumber *max = [list valueForKeyPath:@"@max.altitude"];
+    NSNumber *min = [list valueForKeyPath:@"@min.altitude"];
+    
+//    double medianSpeed = average.doubleValue;
+    double maxAltitude = max.doubleValue;
+    double minAltitude = min.doubleValue;
+    NSInteger count = floor((maxAltitude - minAltitude)/slopeHeigth) +1;
+    
+    NSMutableArray*ranges =  [NSMutableArray new];
+    double stepper = minAltitude;
+    for (NSInteger i = 0; i<count; i++) {
+        stepper = floor(stepper+i*slopeHeigth);
+        NSRange r = NSMakeRange(stepper,slopeHeigth);
+        [ranges addObject:[NSValue valueWithRange:r]];
+    }
+    
+    NSInteger slopeCount = 0;
+    NSInteger climbCount = 0;
+    
+    NSInteger lastIndex= 0;
+    
+    NSInteger direction = -1;//1 up, 0 = down;
+    
+    for (Location*item in list) {
+        NSNumber*altitudse = item.altitude;
+        
+        for (NSInteger i = 0; i<count; i++) {
+            NSRange r = [ranges[i] rangeValue];
+            if ( NSLocationInRange(altitudse.doubleValue,r)) {
+                if (lastIndex < i) { //move up
+                    if (direction != 1) {
+                        direction = 1;
+                        climbCount+=1;
+                        lastIndex = i;
+                        
+                    }
                 }
-                minalt = item.altitude.doubleValue;
+                else if (lastIndex > i)//move down
+                {
+                
+                    if (direction != 0) {
+                        direction = 0;
+                        slopeCount+=1;
+                        lastIndex = i;
+                    }
+                    [rez addObject:@([list indexOfObject:item])];
+                }
+                else //contimue previous move
+                {
+                    if (direction == 0) {
+                        [rez addObject:@([list indexOfObject:item])];
+                    }
+                }
+                
+                break;
             }
-            else
-            {
-//                maxalt = item.altitude.doubleValue;
-                minalt = 0;
-            }
-            maxalt = item.altitude.doubleValue;
+//            NSLog(@"Index= %ld",(long)lastIndex);
         }
     }
-    NSLog(@"Count= %ld",(long)count);
+    
+    NSLog(@"Count= %ld",(long)slopeCount);
+
+    
+    return rez;
+    
+    
+    
+    
+    
+    
+//    if (list && [list count] > 0) {
+//        double minalt = 0; //((Location*)[list firstObject]).altitude.doubleValue;
+//        double maxalt = ceil(((Location*)[list firstObject]).altitude.doubleValue);
+//        for (Location*item in list) {
+//            if ( ceil(item.altitude.doubleValue) < maxalt) {
+//                if (minalt == 0) {
+//                    count++;
+//                }
+//                minalt = item.altitude.doubleValue;
+//            }
+//            else if (ceil(item.altitude.doubleValue) > maxalt)
+//            {
+////                maxalt = item.altitude.doubleValue;
+//                minalt = 0;
+//            }
+//            maxalt = ceil( item.altitude.doubleValue);
+//        }
+//    }
+
 }
 
 @end
